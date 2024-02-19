@@ -3,48 +3,47 @@ import java.awt.*;
 import java.awt.event.*;
 
 class StartingScreen extends JFrame implements ActionListener {
-     private JButton nextButton;
+    private JButton nextButton;
 
-     public StartingScreen() {
-         setTitle("Starting Screen");
-         setSize(1200, 463); 
-         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-         setLayout(null);
+    public StartingScreen() {
+        setTitle("Starting Screen");
+        setSize(1200, 463);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(null);
 
-         JPanel contentPanel = new JPanel();
-         contentPanel.setLayout(null); 
-         contentPanel.setBounds(0, 0, 1200, 463); 
-        
-         ImageIcon backgroundImage = new ImageIcon(".idea/res/travel41.jpg"); 
-         JLabel backgroundLabel = new JLabel(backgroundImage);
-         backgroundLabel.setBounds(0, 0, 1200, 463); 
-         contentPanel.add(backgroundLabel);
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(null);
+        contentPanel.setBounds(0, 0, 1200, 463);
 
-         nextButton = new JButton("Next");
-         nextButton.setBounds(550, 370, 100, 40); 
-         nextButton.addActionListener(this);
-         contentPanel.add(nextButton); 
-          
-         add(contentPanel);
+        ImageIcon backgroundImage = new ImageIcon("D:\\cs221100s2\\PassengerInfoWindow\\src\\main\\java\\res\\travel41.jpg"); // Replace with your image file path
+        JLabel backgroundLabel = new JLabel(backgroundImage);
+        backgroundLabel.setBounds(0, 0, 1200, 463);
+        contentPanel.add(backgroundLabel);
 
-         setLocationRelativeTo(null);
-     }
+        nextButton = new JButton("Next");
+        nextButton.setBounds(550, 370, 100, 40);
+        nextButton.addActionListener(this);
+        contentPanel.add(nextButton);
 
-     @Override
-     public void actionPerformed(ActionEvent e) {
-         if (e.getSource() == nextButton) {
-             dispose(); // Close the starting screen window
-             new PassengerInfoWindow().setVisible(true);
+        add(contentPanel);
 
-         }
-     }
+        setLocationRelativeTo(null);
+    }
 
-    // public static void main(String[] args) {
-    //  StartingScreen startingScreen = new StartingScreen();
-    //  startingScreen.setVisible(true);
-    //
-     }
- }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == nextButton) {
+            dispose(); // Close the starting screen window
+            PassengerInfoWindow infoWindow = new PassengerInfoWindow(); // Initialize PassengerInfoWindow
+            infoWindow.setVisible(true);
+        }
+    }
+
+    public static void main(String[] args) {
+        StartingScreen startingScreen = new StartingScreen();
+        startingScreen.setVisible(true);
+    }
+}
 
 public class PassengerInfoWindow extends JFrame implements ActionListener {
     private JLabel nameLabel;
@@ -93,15 +92,13 @@ public class PassengerInfoWindow extends JFrame implements ActionListener {
             String passengerAge = ageTextField.getText(); 
             JOptionPane.showMessageDialog(this, "Passenger Name: " + passengerName + "\nAge: " + passengerAge);
             dispose();
-            
             PassengerWindow window = new PassengerWindow(passengerName, passengerAge);
             window.setVisible(true);
         }
     }
 
     public static void main(String[] args) {
-        PassengerInfoWindow infoWindow = new PassengerInfoWindow();
-        infoWindow.setVisible(true);
+        StartingScreen.main(args);
     }
 }
 
@@ -112,7 +109,7 @@ class PassengerWindow extends JFrame implements ActionListener {
     private JCheckBox mealCheckBox;
     private JCheckBox wifiCheckBox;
     private JButton bookButton;
-    private JButton cancelButton; 
+    private JButton cancelButton; // Added cancelButton
     private String[] flightList = {"Flight 1 - 10:00 AM", "Flight 2 - 1:00 PM", "Flight 3 - 4:00 PM"};
     private String passengerName;
     private String passengerAge;
@@ -127,6 +124,7 @@ class PassengerWindow extends JFrame implements ActionListener {
         setSize(500, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(6, 1, 10, 10)); 
+
         flightOptions = new JComboBox<>(flightList);
         add(flightOptions);
 
@@ -185,7 +183,7 @@ class PassengerWindow extends JFrame implements ActionListener {
             addToBookingHistory(bookingInfo);
             System.out.println("Booking History for " + passengerName + ": " + getLastBookingInfo());
             JOptionPane.showMessageDialog(this, "Flight booked for " + bookingInfo);
-        } else if (e.getSource() == cancelButton) { 
+        } else if (e.getSource() == cancelButton) { // Handle cancellation
             cancelBooking();
         } else if (e.getSource() == flightOptions) {
             String selectedOption = (String) flightOptions.getSelectedItem();
